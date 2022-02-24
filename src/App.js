@@ -1,5 +1,7 @@
 import { useState } from "react";
 import getTasks from "./API/getTasks";
+import ListItem from "./Components/ListItem";
+import NewTaskForm from "./Components/NewTaskForm";
 
 function App() {
     const [tasks, setTasks] = useState(getTasks())
@@ -26,19 +28,13 @@ function App() {
 
 
     const tasksList = tasks.map((task, index) => {
-        const textDecoration = task.isCompleted ? 'line-through' : 'none'
-        let deleteBtn = ''
-        if (task.isCompleted) {
-            deleteBtn = <button onClick={() => deleteTask(index)}>Delete</button>
-        }
-
-        return (
-            <li key={index}>
-                <input type="checkbox" checked={task.isCompleted} onChange={() => changeTaskState(index)} />
-                <span style={{textDecoration: textDecoration}}>{task.title}</span>
-                {deleteBtn}
-            </li>
-        )
+          return <ListItem 
+            key={index}
+            index={index} 
+            task={task} 
+            deleteTask={deleteTask} 
+            changeTaskState={changeTaskState} 
+        />
     })
 
     return (
@@ -48,12 +44,11 @@ function App() {
                 {tasksList}
             </ul>
             <h2>Create new task</h2>
-            <input 
-                type="text" 
-                value={newTaskName} 
-                onChange={(event) => setNewTaskName(event.target.value)}
+            <NewTaskForm 
+                newTaskName={newTaskName}
+                setNewTaskName={setNewTaskName}
+                addNewTask={addNewTask}
             />
-            <button onClick={addNewTask}>Add task</button>
         </div>
     )
 }
